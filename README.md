@@ -17,7 +17,7 @@ Time: 90.11s
 Memory: 2760.09 MB
 ```
 
-## First results
+## Fill users and session arrays using awk
 ### File with 1m records
 ```
 Time: 17.55
