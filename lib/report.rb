@@ -1,8 +1,9 @@
 module Report
   module_function
-  def create(users, sessions)
-    report = {}
+  def create(report, users, source)
+    report[:totalUsers] = users.count
 
+    sessions = `awk -F ',' '$1=="session" {print $0}' #{source}`.split("\n").map {|u| Parsers::Session.parse(u)}
     sessions_by_user_id = {}
 
     measure("sessions_by_user") do
@@ -11,19 +12,14 @@ module Report
         sessions_by_user_id[session['user_id']] << session
       end
     end
-
-    report[:totalUsers] = users.count
-
-
     # Подсчёт количества уникальных браузеров
     measure("report browsers") do
-      unique_browsers = sessions.map { |s| s['browser'] }.uniq
+      report['uniqueBrowsersCount'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | uniq | wc -l`
 
-      report['uniqueBrowsersCount'] = unique_browsers.count
+      report['totalSessions'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | wc -l`
 
-      report['totalSessions'] = sessions.count
-
-      report['allBrowsers'] = unique_browsers.sort.join(',')
+      # report['allBrowsers'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | sed -z 's/\n/,/g'`
+      report['allBrowsers'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort `.gsub("\n", ',')
     end
 
     # Статистика по пользователям
@@ -32,7 +28,11 @@ module Report
 
     measure("users each collect") do
       users.each do |user|
-        user_object = User.new(attributes: user, sessions: sessions_by_user_id[user['id']])
+        # user_session = `awk -F ',' '$1=="session" && $2=="#{user['id']}" {print $0}' #{source}`.split("\n").map {|u| Parsers::Session.parse(u)}
+        user_object = User.new(attributes: user, sessions: 
+                               sessions_by_user_id[user['id']]
+                               # user_session
+                              )
 
         # Собираем количество сессий по пользователям
         collect_stats_from_users(report, user_object) do |user|
