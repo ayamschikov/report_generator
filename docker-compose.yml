@@ -1,0 +1,16 @@
+version: "2"
+
+services:
+  web:
+    build: .
+    image: report-generator/web
+    container_name: report-generator-web
+    command: bash -c "rackup -p 8090"
+    volumes: &web-volumes
+      - ./:/app
+      - ~/.ssh:/root/.ssh
+      - ~/.bash_history:/root/.bash_history
+    ports:
+      - "8090:8090"
+    environment: &web-environment
+      RACK_ENV: development
