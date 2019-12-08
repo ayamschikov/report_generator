@@ -7,22 +7,16 @@ class App
     users = []
     sessions = []
 
+    # takes a bit more memory, saves a bit time
     measure("collect users and sessions") do
-      File.foreach(source) do |line|
-        cols = line.split(',')
-        users.push Parsers::User.parse(line) if cols[0] == 'user'
-        sessions.push Parsers::Session.parse(line) if cols[0] == 'session'
-      end
+      users = `awk -F ',' '$1=="user" {print $0}' #{source}`.split("\n").map {|u| Parsers::User.parse(u)}
+      sessions = `awk -F ',' '$1=="session" {print $0}' #{source}`.split("\n").map {|u| Parsers::Session.parse(u)}
     end
 
     report = Report.create(users, sessions)
 
-    rep = ""
-    measure("to json") do
-      rep = report.to_json
-    end
     measure("write to file") do
-      File.write('result.json', "#{rep}\n")
+      File.write('result.json', "#{report.to_json}\n")
     end
   end
 end
