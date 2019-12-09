@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'json'
 
 class App
   def run(source)
@@ -23,21 +24,22 @@ class App
       File.foreach(source) do |line|
         cols = line.split(',')
 
-        if cols[0] == 'user'
+        case cols[0]
+        when 'user'
           unless sessions.empty?
             report = Report.create(report, user, sessions)
             sessions = []
           end
           user = Parsers::User.parse(line)
+        when 'session'
+          sessions.push Parsers::Session.parse(line)
         end
-
-        sessions.push Parsers::Session.parse(line) if cols[0] == 'session'
       end
       report = Report.create(report, user, sessions)
     end
 
     measure('write to file') do
-      File.write('result.json', "#{report.to_json}\n")
+      File.write('result.json', report.to_json)
     end
   end
 end
