@@ -28,3 +28,15 @@ Memory: 952.29 MB
 Time: 73.99
 Memory: 2829.38 MB
 ```
+
+## Parse file using "batches"
+### File with 1m records
+```
+Time: 17.88
+Memory: 326.99 MB
+```
+### File with ~3m records
+```
+Time: 66.42
+Memory: 1076.65 MB
+```
