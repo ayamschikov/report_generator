@@ -5,7 +5,7 @@ module Report
 
     sessions_by_user_id = {}
     measure("sessions_by_user") do
-      sessions = `awk -F ',' '$1=="session" {print $0}' #{source}`.split("\n").map {|u| Parsers::Session.parse(u)}
+      sessions = `awk -F ',' '$1=="session" {print $0}' #{source}`.split("\n").lazy.map {|u| Parsers::Session.parse(u)}
 
       sessions.each do |session|
         sessions_by_user_id[session['user_id']] ||= []
