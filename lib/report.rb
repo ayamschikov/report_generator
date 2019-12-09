@@ -3,10 +3,10 @@ module Report
   def create(report, users, source)
     report[:totalUsers] = users.count
 
-    sessions = `awk -F ',' '$1=="session" {print $0}' #{source}`.split("\n").map {|u| Parsers::Session.parse(u)}
     sessions_by_user_id = {}
-
     measure("sessions_by_user") do
+      sessions = `awk -F ',' '$1=="session" {print $0}' #{source}`.split("\n").map {|u| Parsers::Session.parse(u)}
+
       sessions.each do |session|
         sessions_by_user_id[session['user_id']] ||= []
         sessions_by_user_id[session['user_id']] << session
@@ -14,12 +14,12 @@ module Report
     end
     # Подсчёт количества уникальных браузеров
     measure("report browsers") do
-      report['uniqueBrowsersCount'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | uniq | wc -l`
+      report['uniqueBrowsersCount'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | uniq | wc -l`.to_i
 
-      report['totalSessions'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | wc -l`
+      report['totalSessions'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | wc -l`.to_i
 
       # report['allBrowsers'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | sed -z 's/\n/,/g'`
-      report['allBrowsers'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort `.gsub("\n", ',')
+      report['allBrowsers'] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | uniq`.gsub("\n", ',')
     end
 
     # Статистика по пользователям

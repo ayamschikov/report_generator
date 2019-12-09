@@ -8,24 +8,9 @@ require 'require_all'
 require 'optparse'
 require_rel '../lib'
 
-options = {}
-OptionParser.new do |parser|
-  parser.banner = 'Usage: make_report.rb [options] FILE'
-  options['sort'] = []
-
-  parser.on('-h', '--help', 'Show this help message') do
-    puts parser
-    exit
-  end
-
-  parser.on('-o', '--out FILE', 'Output file') do |file|
-    options['output'] = file
-  end
-end.parse!
-
 source = ARGV[0]
 
-app = App.new(options)
+app = App.new
 
 measure("total script") do
   app.run(source)
@@ -60,8 +45,7 @@ end
 #   def test_result
 #     Benchmark.bm(15) do |benchmark|
 #       benchmark.report("parse data.txt") do
-#         options = {}
-#         App.new(options).run('data.txt')
+#         App.new.run('data.txt')
 #       end
 #     end
 
