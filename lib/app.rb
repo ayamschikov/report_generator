@@ -1,11 +1,10 @@
 class App
   def run(source)
     users = []
-    sessions = []
 
     # takes a bit more memory, saves a bit time
     measure("collect users and sessions") do
-      users = `awk -F ',' '$1=="user" {print $0}' #{source}`.split("\n").map {|u| Parsers::User.parse(u)}
+      users = `awk -F ',' '$1=="user" {print $0}' #{source}`.split("\n").lazy.map {|u| Parsers::User.parse(u)}
     end
 
     report = {}
