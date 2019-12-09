@@ -1,9 +1,11 @@
-require_all "../lib"
+# frozen_string_literal: true
+
+require_all '../lib'
 class TestMe < Minitest::Test
   def setup
     File.write('result.json', '')
     File.write('data.txt',
-'user,0,Leida,Cira,0
+               'user,0,Leida,Cira,0
 session,0,0,Safari 29,87,2016-10-23
 session,0,1,Firefox 12,118,2017-02-27
 session,0,2,Internet Explorer 28,31,2017-03-28
@@ -26,7 +28,7 @@ session,2,3,Chrome 20,84,2016-11-25
 
   def test_result
     Benchmark.bm(15) do |benchmark|
-      benchmark.report("parse data.txt") do
+      benchmark.report('parse data.txt') do
         App.run
       end
     end

@@ -1,4 +1,5 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'json'
 require 'pry'
@@ -12,10 +13,9 @@ source = ARGV[0]
 
 app = App.new
 
-measure("total script") do
+measure('total script') do
   app.run(source)
 end
-
 
 # class TestMe < Minitest::Test
 #   def setup
