@@ -37,6 +37,19 @@ Memory: 326.99 MB
 ```
 ### File with ~3m records
 ```
-Time: 66.42
-Memory: 1076.65 MB
+Time: 56.20
+Memory: 949.5 MB
+```
+
+
+## Results on 30000 lines in data.txt (remove extra lines from data_large.txt)
+### Task.rb
+```
+Time: 32.97
+Memory: 88.21 MB
+```
+### My solution
+```
+Time: 0.39
+Memory: 9.59 MB
 ```
