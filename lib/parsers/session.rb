@@ -9,7 +9,7 @@ module Parsers
         session_id: fields[2],
         browser: fields[3].upcase,
         time: fields[4],
-        date: fields[5]
+        date: Date.iso8601(fields[5])
       }
     end
   end
