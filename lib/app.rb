@@ -2,13 +2,14 @@
 
 class App
   def run(source)
-    report = { totalUsers: 0 }
+    report = {}
 
     # Подсчёт количества уникальных браузеров
     measure('report browsers') do
+      report[:totalUsers] = `awk -F ',' '$1=="user" {print $1}' #{source} | wc -l`.to_i
       report[:uniqueBrowsersCount] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | uniq | wc -l`.to_i
 
-      report[:totalSessions] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | wc -l`.to_i
+      report[:totalSessions] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | wc -l`.to_i
 
       report[:allBrowsers] = `awk -F ',' '$1=="session" {print toupper($4)}' #{source} | sort | uniq`.split("\n").join(',')
     end
@@ -28,7 +29,6 @@ class App
             sessions = []
           end
           user = Parsers::User.parse(line)
-          report[:totalUsers] += 1
         end
 
         sessions.push Parsers::Session.parse(line) if cols[0] == 'session'
