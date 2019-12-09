@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'benchmark'
 
 def print_memory_usage
@@ -17,12 +19,12 @@ def print_time_spent
 end
 
 def measure(report)
-  puts " "
+  puts ' '
   puts report
-    print_memory_usage do
-      print_time_spent do
-        yield
-      end
+  print_memory_usage do
+    print_time_spent do
+      yield
     end
-  puts " "
+  end
+  puts ' '
 end
