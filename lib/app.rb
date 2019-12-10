@@ -7,10 +7,10 @@ class App
     report = {}
     user = nil
     sessions = []
-    rep_limit = 500
+    user_stats_limit = 500
     user_stats = []
     need_comma = false
-    dest = 'result.json'.freeze
+    dest = 'result.json'
 
     # prepare result.json with generic stats
     report[:totalUsers] = `awk -F ',' '$1=="user" {print $1}' #{source} | wc -l`.to_i
@@ -43,7 +43,7 @@ class App
         sessions.push Parsers::Session.parse(fields)
       end
 
-      if user_stats.count == rep_limit
+      if user_stats.count == user_stats_limit
         need_comma = true
         offset += IO.binwrite(dest, user_stats.join(','), offset)
         user_stats = []
