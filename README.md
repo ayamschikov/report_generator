@@ -37,8 +37,8 @@ Memory: 326.99 MB
 ```
 ### File with ~3m records
 ```
-Time: 56.20
-Memory: 949.5 MB
+Time: 53.66
+Memory: 928.3 MB
 ```
 
 
@@ -50,6 +50,6 @@ Memory: 88.21 MB
 ```
 ### My solution
 ```
-Time: 0.39
-Memory: 9.59 MB
+Time: 0.36
+Memory: 9.18 MB
 ```

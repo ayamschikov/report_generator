@@ -2,8 +2,7 @@
 
 module Parsers
   module User
-    def self.parse(user)
-      fields = user.split(',')
+    def self.parse(fields)
       {
         id: fields[1],
         first_name: fields[2],
