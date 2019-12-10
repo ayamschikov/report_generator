@@ -29,7 +29,7 @@ Time: 73.99
 Memory: 2829.38 MB
 ```
 
-## Parse file using "batches"
+## Parse file using File.foreach
 ### File with 1m records
 ```
 Time: 17.88
@@ -41,6 +41,17 @@ Time: 53.66
 Memory: 928.3 MB
 ```
 
+## Parse file using "batches"
+### File with 1m records
+```
+Time: 14.15
+Memory: 156.3 MB
+```
+### File with ~3m records
+```
+Time: 53.79
+Memory: 484.47 MB
+```
 
 ## Results on 30000 lines in data.txt (remove extra lines from data_large.txt)
 ### Task.rb
