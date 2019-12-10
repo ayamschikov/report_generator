@@ -4,6 +4,8 @@ require 'json'
 class App
   def run(source)
     report = {}
+    user = nil
+    sessions = []
 
     # Подсчёт количества уникальных браузеров
     measure('report browsers') do
@@ -17,9 +19,6 @@ class App
 
     report[:usersStats] = {}
 
-    user = nil
-    sessions = []
-
     measure('collect and parse with foreach') do
       File.foreach(source) do |line|
         cols = line.split(',')
@@ -27,7 +26,8 @@ class App
         case cols[0]
         when 'user'
           unless sessions.empty?
-            report = Report.create(report, user, sessions)
+            user_key = "#{user[:first_name]} #{user[:last_name]}"
+            report[:usersStats][user_key] = Report.collect_stats_from_sessions(sessions)
             sessions = []
           end
           user = Parsers::User.parse(line)
@@ -35,7 +35,8 @@ class App
           sessions.push Parsers::Session.parse(line)
         end
       end
-      report = Report.create(report, user, sessions)
+      user_key = "#{user[:first_name]} #{user[:last_name]}"
+      report[:usersStats][user_key] = Report.collect_stats_from_sessions(sessions)
     end
 
     measure('write to file') do
