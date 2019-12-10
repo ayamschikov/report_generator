@@ -1,10 +1,10 @@
 # frozen_string_literal: true
+
 require 'date'
 
 module Parsers
   module Session
-    def self.parse(session)
-      fields = session.split(',')
+    def self.parse(fields)
       {
         user_id: fields[1],
         session_id: fields[2],
